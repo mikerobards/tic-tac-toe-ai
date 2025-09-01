@@ -34,6 +34,12 @@ class TicTacToe {
     
     async makeMove(position) {
         try {
+            // Only allow moves on human turn (X)
+            const currentState = await this.getCurrentGameState();
+            if (currentState.current_player !== 'X' || currentState.game_over) {
+                return;
+            }
+            
             const response = await fetch('/move', {
                 method: 'POST',
                 headers: {
@@ -46,10 +52,20 @@ class TicTacToe {
             
             if (data.success) {
                 this.updateGameState(data.game_state);
-                this.animateMove(position, data.game_state.board[position]);
+                this.animateMove(position, 'X');
             }
         } catch (error) {
             console.error('Error making move:', error);
+        }
+    }
+    
+    async getCurrentGameState() {
+        try {
+            const response = await fetch('/state');
+            return await response.json();
+        } catch (error) {
+            console.error('Error getting game state:', error);
+            return null;
         }
     }
     
@@ -102,7 +118,11 @@ class TicTacToe {
         if (gameState.game_over) {
             this.handleGameEnd(gameState.winner);
         } else {
-            this.gameStatusElement.textContent = `${gameState.current_player}'s turn`;
+            if (gameState.current_player === 'X') {
+                this.gameStatusElement.textContent = "Your turn";
+            } else {
+                this.gameStatusElement.textContent = "AI thinking...";
+            }
         }
         
         this.updateCellStates(gameState.game_over);
@@ -123,9 +143,12 @@ class TicTacToe {
         if (winner === 'Tie') {
             message = "It's a Tie!";
             this.gameStatusElement.textContent = "Game ended in a tie";
+        } else if (winner === 'X') {
+            message = "You Win!";
+            this.gameStatusElement.textContent = "You are the winner!";
         } else {
-            message = `${winner} Wins!`;
-            this.gameStatusElement.textContent = `${winner} is the winner!`;
+            message = "AI Wins!";
+            this.gameStatusElement.textContent = "AI is the winner!";
         }
         
         this.winMessage.textContent = message;
