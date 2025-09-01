@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tic Tac Toe</h1>
+            <div class="game-info">
+                <div id="current-player">Current Player: <span id="player-indicator">X</span></div>
+                <div id="game-status"></div>
+            </div>
+        </header>
+        
+        <main>
+            <div class="game-board" id="game-board">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+            
+            <div class="controls">
+                <button id="reset-btn" class="reset-button">New Game</button>
+            </div>
+        </main>
+        
+        <div id="win-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="win-message"></h2>
+                <button id="play-again-btn" class="play-again-button">Play Again</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
